@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Issue from './Issue';
 
+import './IssueList.css';
+
 class IssueList extends Component {
     state = {
         issueData: []
@@ -21,11 +23,11 @@ class IssueList extends Component {
     render(){
         const { issueData } = this.state;
         return (
-            <>
-                {issueData.map((issue, index) => (
+            <div className="issue-list">
+                {issueData.map((issue) => (
                     <Issue issue={issue} key={issue.id}/>
                 ))}
-            </>
+            </div>
         )
     }
 };
