@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import Issue from './Issue';
+import { Switch, Route, Link, useRouteMatch } from 'react-router-dom';
+import IssueDetail from './IssueDetail';
+
+//import Issue from './Issue';
 
 import './IssueList.css';
 
@@ -22,11 +25,26 @@ class IssueList extends Component {
     }
     render(){
         const { issueData } = this.state;
+        //const { url } = useRouteMatch();
         return (
             <div className="issue-list">
-                {issueData.map((issue) => (
-                    <Issue issue={issue} key={issue.id}/>
-                ))}
+                {issueData.map((issue) => {
+                    return (
+                        <>
+                        <h2>{issue.title}</h2>
+                        <Link to={`/${issue.number}`} key={issue.number}>
+                            {issue.number}
+                        </Link>
+                        
+                        <Route path={`/:id`}>
+                            <Switch>
+                                <IssueDetail number={issue.number}/>
+                            </Switch>
+                        </Route>
+                        </>
+                    )
+                    
+    })}
             </div>
         )
     }
