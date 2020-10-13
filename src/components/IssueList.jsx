@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route, Link } from 'react-router-dom';
 import Issue from './Issue';
 
 import './IssueList.css';
@@ -17,17 +18,39 @@ class IssueList extends Component {
     async componentDidMount() {
         const issueData = await this.loadData();
         this.setState({
-            issueData: issueData
+            issueData
         })
     }
     render(){
         const { issueData } = this.state;
         return (
-            <div className="issue-list">
-                {issueData.map((issue) => (
-                    <Issue issue={issue} key={issue.id}/>
-                ))}
-            </div>
+            <>
+                {!!issueData.length ? ( 
+                    
+                <>    
+                <h1>Github Issues IssueList</h1>
+                <Route exact path="/">
+                    <ul>
+                    {issueData.map((issue) => {
+                    return (
+                        <li key={issue.id}>
+                            {issue.title}
+                            <Link to={`/issue/${issue.number}`}>
+                                View Details
+                            </Link>
+                        </li>
+                    )
+                })}
+                </ul>
+                </Route>
+                <Route path={`/issue/:issue_number`}>
+                    <Link to="/">Return to List</Link>
+                    <Issue issues={issueData}/>
+                </Route>
+                </>
+                ) : (<p>Fetching issues...</p>)
+                }
+            </>
         )
     }
 };
