@@ -1,33 +1,51 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Route, Link } from 'react-router-dom';
 import Issue from './Issue';
+import './IssueList.css';
 
-class IssueList extends Component {
-    state = {
-        issueData: []
-    };
+import { Title } from "bloomer";
 
-    loadData = async () => {
-        const response = await fetch('https://api.github.com/repos/facebook/create-react-app/issues');
-        const data = await response.json();
-        return data;
-    }
+const IssueList = props => {
+    const [issues, setIssues] = useState([]); 
 
-    async componentDidMount() {
-        const issueData = await this.loadData();
-        this.setState({
-            issueData: issueData
-        })
-    }
-    render(){
-        const { issueData } = this.state;
-        return (
-            <>
-                {issueData.map((issue, index) => (
-                    <Issue issue={issue} key={issue.id}/>
-                ))}
+    useEffect(() => {
+        (async function(){
+            const response = await fetch('https://api.github.com/repos/facebook/create-react-app/issues');
+            const issues = await response.json();
+            setIssues(issues);
+        })();
+    }, [setIssues]);
+
+    return (
+        <>
+            {!!issues.length ? ( 
+                
+            <>    
+            <Title isSize={2}>Github Issues IssueList</Title>
+            <Route exact path="/">
+                <ul>
+                {issues.map((issue) => {
+                return (
+                    <li key={issue.id}>
+                        {issue.title}
+                        <Link to={`/issue/${issue.number}`}>
+                            View Details
+                        </Link>
+                    </li>
+                )
+            })}
+            </ul>
+            </Route>
+            <Route path={`/issue/:issue_number`}>
+                <Link to="/">Return to List</Link>
+                <Issue issues={issues}/>
+            </Route>
             </>
-        )
-    }
-};
+            ) : (<p>Fetching issues...</p>)
+            }
+        </>
+    )
+}
+
 
 export default IssueList;
