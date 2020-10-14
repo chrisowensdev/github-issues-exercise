@@ -3,6 +3,8 @@ import { Route, Link } from 'react-router-dom';
 import Issue from './Issue';
 import './IssueList.css';
 
+import { Title } from "bloomer";
+
 const IssueList = props => {
     const [issues, setIssues] = useState([]); 
 
@@ -19,7 +21,7 @@ const IssueList = props => {
             {!!issues.length ? ( 
                 
             <>    
-            <h1>Github Issues IssueList</h1>
+            <Title isSize={2}>Github Issues IssueList</Title>
             <Route exact path="/">
                 <ul>
                 {issues.map((issue) => {
